@@ -6,7 +6,7 @@ version 0.12.1.
 ## License
 ### The MIT License (MIT)
 
-Copyright (c) [2012] [Jack Wootton]
+Copyright (c) 2012 Jack Wootton
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
