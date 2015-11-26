@@ -72,6 +72,7 @@ angular.module('jsonschemaV4App')
             this.editableSchema2FinalSchema = function() {
                 self.schema = angular.copy(self.editableSchema);
                 this.clean(self.schema);
+                $log.debug(self.schema);
             };
 
 
@@ -89,6 +90,7 @@ angular.module('jsonschemaV4App')
                 up the 'required' property from __required__ metadata.
             */
             this.clean = function(obj) {
+                console.log("clean");
                 var key = obj['__key__'];
                 for (var k in obj)
                 {
@@ -98,128 +100,127 @@ angular.module('jsonschemaV4App')
                             continue;
                         }
                         // Recursive call parsing in parent object this time.
-                        //console.log(obj[k]);
                         this.clean(obj[k]);
+                        return;
                     }
-                    else {
-                        switch (String(k)) {
-                            /*
-                            Metadata keywords.
-                            */
-                            case '__required__':
-                                var isRequired = obj[k];
-                                console.log('getSchema('+obj.__parent__+')');
-                                var parentSchema = self.getSchema(obj.__parent__);
-                                if (parentSchema) {
+                    switch (String(k)) {
+                        /*
+                        Metadata keywords.
+                        */
+                        case '__required__':
+                            var isRequired = obj[k];
+                            console.log('isRequired: ' + isRequired);
+                            var parentSchema = self.getSchema(obj.__parent__);
+                            if (parentSchema) {
 
-                                    if (isRequired) {
-                                        if (!parentSchema.required) {
-                                            parentSchema.required = [];
-                                        }
+                                if (isRequired) {
+                                    if (!parentSchema.required) {
+                                        parentSchema.required = [];
+                                    }
+                                    var index = parentSchema.required.indexOf(key);
+                                    if (index < 0) {
+                                        parentSchema.required.push(key);
+                                    }
+                                } else {
+
+                                    if (parentSchema.required) {
+                                         $log.debug('key:' + key);
+                                         $log.debug(parentSchema);
                                         var index = parentSchema.required.indexOf(key);
-                                        if (index < 0) {
-                                            parentSchema.required.push(key);
-                                        }
-                                    } else {
-
-                                        if (parentSchema.required) {
-                                            var index = parentSchema.required.indexOf(key);
-                                            if (index > -1) {
-                                                console.log(key);
-                                                parentSchema.required.splice(index, 1);
-                                                console.log(parentSchema.required);
-                                            }
+                                        $log.debug(parentSchema.required);
+                                        if (index > -1) {
+                                            parentSchema.required.splice(index, 1);
+                                            $log.debug("Splice: " + parentSchema.required);
                                         }
                                     }
                                 }
-
-                                //self.addRequired(obj, key, required);
+                            }
+                        break;
+                        case '__parent__':
+                            //console.log('obj.__parent__' + '=' + obj.__parent__);
+                        case '__removed__':
                             break;
-                            case '__parent__':
-                                //console.log('obj.__parent__' + '=' + obj.__parent__);
-                            case '__removed__':
-                                break;
-                            /*
-                            Keywords for arrays.
-                            */
-                            case 'maxItems':
-                            case 'minItems':
-                                break;
-                            case 'uniqueItems':
-                                var val = Boolean(obj[k]);
-                                obj[k] = val;
-                                if (!user_defined_options.arraysVerbose) {
-                                    if (!val) {
-                                        delete obj[k];
-                                    }
+                        /*
+                        Keywords for arrays.
+                        */
+                        case 'maxItems':
+                        case 'minItems':
+                            break;
+                        case 'uniqueItems':
+                            var val = Boolean(obj[k]);
+                            obj[k] = val;
+                            if (!user_defined_options.arraysVerbose) {
+                                if (!val) {
+                                    delete obj[k];
                                 }
-                                break;
-                            case 'additionalItems':
-                                var val = Boolean(obj[k]);
-                                obj[k] = val;
-                                if (!user_defined_options.arraysVerbose) {
-                                    if (val) {
-                                        // true is default
-                                        delete obj[k];
-                                    }
+                            }
+                            break;
+                        case 'additionalItems':
+                            var val = Boolean(obj[k]);
+                            obj[k] = val;
+                            if (!user_defined_options.arraysVerbose) {
+                                if (val) {
+                                    // true is default
+                                    delete obj[k];
                                 }
-                                break;
-                            /*
-                            Keywords for numeric instances (number and
-                            integer).
-                            */
-                            case 'minimum':
-                            case 'maximum':
-                            case 'multipleOf':
-                                var val = parseInt(obj[k]);
-                                obj[k] = val;
-                                if (!user_defined_options.numericVerbose) {
-                                    // Only delete if defaut value.
-                                    if (!val && val != 0) {
-                                        delete obj[k];
-                                    }
+                            }
+                            break;
+                        /*
+                        Keywords for numeric instances (number and
+                        integer).
+                        */
+                        case 'minimum':
+                        case 'maximum':
+                        case 'multipleOf':
+                            var val = parseInt(obj[k]);
+                            obj[k] = val;
+                            if (!user_defined_options.numericVerbose) {
+                                // Only delete if defaut value.
+                                if (!val && val != 0) {
+                                    delete obj[k];
                                 }
-                                break;
-                            case 'exclusiveMinimum':
-                            case 'exclusiveMaximum':
-                                var val = Boolean(obj[k]);
-                                obj[k] = val;
-                                if (!user_defined_options.numericVerbose) {
-                                    if (!val) {
-                                        delete obj[k];
-                                    }
+                            }
+                            break;
+                        case 'exclusiveMinimum':
+                        case 'exclusiveMaximum':
+                            var val = Boolean(obj[k]);
+                            obj[k] = val;
+                            if (!user_defined_options.numericVerbose) {
+                                if (!val) {
+                                    delete obj[k];
                                 }
-                                break;
-                            /*
-                            Metadata keywords.
-                            */
-                            case 'name':
-                            case 'title':
-                            case 'description':
-                                var val = String(obj[k]).trim();
-                                obj[k] = val;
-                                if (!user_defined_options.metadataKeywords) {
-                                    if (!val) {
-                                        delete obj[k];
-                                    }
+                            }
+                            break;
+                        /*
+                        Metadata keywords.
+                        */
+                        case 'name':
+                        case 'title':
+                        case 'description':
+                            var val = String(obj[k]).trim();
+                            obj[k] = val;
+                            if (!user_defined_options.metadataKeywords) {
+                                if (!val) {
+                                    delete obj[k];
                                 }
-                                break;
-                            /*
-                            Keywords for objects.
-                            */
-                            case 'additionalProperties':
-                                var val = Boolean(obj[k]);
-                                obj[k] = val;
-                                if (!user_defined_options.objectsVerbose) {
-                                    if (val) {
-                                        // true is default
-                                        delete obj[k];
-                                    }
+                            }
+                            break;
+                        /*
+                        Keywords for objects.
+                        */
+                        case 'additionalProperties':
+                            var val = Boolean(obj[k]);
+                            obj[k] = val;
+                            if (!user_defined_options.objectsVerbose) {
+                                if (val) {
+                                    // true is default
+                                    delete obj[k];
                                 }
-                                break;
+                            }
+                            break;
 
 
-                        }
+                    }
                         // General logic.
                         // Remove __meta data__ from Code schema, but don't change
                         // editable schema.
@@ -227,7 +228,7 @@ angular.module('jsonschemaV4App')
                         if (metaKey) {
                             delete obj[k];
                         }
-                    }
+                    
                 }
             };
 
