@@ -48,7 +48,7 @@ angular.module('jsonschemaV4App')
                 try {
                     // Convert JSON string to JavaScript object.
                     self.json = angular.fromJson(user_defined_options.json);
-                    console.log(self.json);
+                    // console.log(self.json);
                     /*
                     * Construct our own, custom, intermediate format that
                     * represents the hierarchy of parent / child schemas but
@@ -72,7 +72,7 @@ angular.module('jsonschemaV4App')
             this.editableSchema2FinalSchema = function() {
                 self.schema = angular.copy(self.editableSchema);
                 this.clean(self.schema);
-                $log.debug(self.schema);
+                // $log.debug(self.schema);
             };
 
 
@@ -90,10 +90,11 @@ angular.module('jsonschemaV4App')
                 up the 'required' property from __required__ metadata.
             */
             this.clean = function(obj) {
-                console.log("clean");
+                // console.log("clean(" + obj + ")");
                 var key = obj['__key__'];
                 for (var k in obj)
                 {
+                    // console.log(k);
                     if (typeof obj[k] == "object" && obj[k] !== null) {
                         if (obj[k].__removed__) {
                             delete obj[k];
@@ -109,7 +110,7 @@ angular.module('jsonschemaV4App')
                         */
                         case '__required__':
                             var isRequired = obj[k];
-                            console.log('isRequired: ' + isRequired);
+                            // console.log('isRequired: ' + isRequired);
                             var parentSchema = self.getSchema(obj.__parent__);
                             if (parentSchema) {
 
@@ -124,13 +125,13 @@ angular.module('jsonschemaV4App')
                                 } else {
 
                                     if (parentSchema.required) {
-                                         $log.debug('key:' + key);
-                                         $log.debug(parentSchema);
+                                         // $log.debug('key:' + key);
+                                         // $log.debug(parentSchema);
                                         var index = parentSchema.required.indexOf(key);
-                                        $log.debug(parentSchema.required);
+                                        // $log.debug(parentSchema.required);
                                         if (index > -1) {
                                             parentSchema.required.splice(index, 1);
-                                            $log.debug("Splice: " + parentSchema.required);
+                                            // $log.debug("Splice: " + parentSchema.required);
                                         }
                                     }
                                 }
@@ -490,7 +491,7 @@ angular.module('jsonschemaV4App')
 
             this.getSchemaById = function(obj, id) {
 
-                console.log("object: " + obj.__key__ + ', ' + typeof obj);
+                // console.log("object: " + obj.__key__ + ', ' + typeof obj);
 
                 for (var k in obj)
                 {
@@ -501,7 +502,7 @@ angular.module('jsonschemaV4App')
                     switch (String(k)) {
                         case 'id':
                             if (String(obj[k]) == String(id)) {
-                                console.log('found: ' + obj.__key__);
+                                // console.log('found: ' + obj.__key__);
                                 return  obj;
                             }
                     }

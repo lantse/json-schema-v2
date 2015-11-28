@@ -156,9 +156,10 @@ angular.module('jsonschemaV4App')
                 $scope.data = Schemaservice.getEditableSchema();
             }
 
-            $scope.$on('E_SchemaUpdated', function (event, data) {
-                $scope.init();
-            });
+            // $scope.$on('E_SchemaUpdated', function (event, data) {
+            //     $log.debug('E_SchemaUpdated');
+            //     $scope.init();
+            // });
 
             $scope.init();
         }
@@ -174,9 +175,10 @@ angular.module('jsonschemaV4App')
                                 true);
             }
 
-            $scope.$on('E_SchemaUpdated', function (event, data) {
-                $scope.init();
-            });
+            // $scope.$on('E_SchemaUpdated', function (event, data) {
+            //     $log.debug('E_SchemaUpdated');
+            //     $scope.init();
+            // });
 
             $scope.init();
         }
@@ -192,9 +194,10 @@ angular.module('jsonschemaV4App')
                                 false);
             }
 
-            $scope.$on('E_SchemaUpdated', function (event, data) {
-                $scope.init();
-            });
+            // $scope.$on('E_SchemaUpdated', function (event, data) {
+            //     $log.debug('E_SchemaUpdated');
+            //     $scope.init();
+            // });
 
             $scope.init();
         }
@@ -213,6 +216,8 @@ angular.module('jsonschemaV4App')
 
             $scope.setEditView = function() {
                 // Change view.
+                $scope.data = Schemaservice.getSchemaAsString(
+                                false);
                 $scope.editSchema = true;
 
                 $scope.stringSchema = false;
@@ -221,6 +226,8 @@ angular.module('jsonschemaV4App')
 
             $scope.setStringView = function() {
                 // Change view.
+                $scope.data = Schemaservice.getSchemaAsString(
+                                false);
                 $scope.stringSchema = true;
 
                 $scope.editSchema = false;
@@ -230,12 +237,17 @@ angular.module('jsonschemaV4App')
             $scope.setCodeView = function() {
                 // The user may have come from Edit View so assume schema
                 // has changed.
-                $rootScope.$broadcast('E_SchemaUpdated');
+                // $rootScope.$broadcast('E_SchemaUpdated');
                 // Change view.
+                $scope.data = Schemaservice.getSchemaAsString(
+                                false);
+                $log.debug($scope.data);
                 $scope.codeSchema = true;
 
                 $scope.editSchema = false;
                 $scope.stringSchema = false;
+
+                $scope.$digest();
             };
 
             $scope.init = function() {
