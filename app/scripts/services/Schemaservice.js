@@ -47,7 +47,7 @@ angular.module('jsonschemaV4App')
             this.jsonString2EditableSchema = function() {
                 try {
                     // Convert JSON string to JavaScript object.
-                    self.json = angular.fromJson(user_defined_options.json);
+                    self.json = angular.fromJson(UserDefinedOptions.json);
                     console.log(self.json);
                     /*
                     * Construct our own, custom, intermediate format that
@@ -94,15 +94,15 @@ angular.module('jsonschemaV4App')
                 {
                     var property = obj[k];
                     
-                    if (typeof property == "object" && property !== null) {
+                    if (typeof obj[k] == "object" && obj[k] !== null) {
                         // User removed schema.
-                        if (property.__removed__) {
+                        if (obj[k].__removed__) {
                             // Will delete all sub-schemas, which we want.
-                            delete property;
+                            delete obj[k];
                             continue;
                         }
                         // Recursive call parsing in sub-schema.
-                        this.clean(property);
+                        this.clean(obj[k]);
                     }
 
                     //else {
@@ -152,7 +152,7 @@ angular.module('jsonschemaV4App')
                         case 'uniqueItems':
                             var val = Boolean(obj[k]);
                             obj[k] = val;
-                            if (!user_defined_options.arraysVerbose) {
+                            if (!UserDefinedOptions.arraysVerbose) {
                                 if (!val) {
                                     delete obj[k];
                                 }
@@ -161,7 +161,7 @@ angular.module('jsonschemaV4App')
                         case 'additionalItems':
                             var val = Boolean(obj[k]);
                             obj[k] = val;
-                            if (!user_defined_options.arraysVerbose) {
+                            if (!UserDefinedOptions.arraysVerbose) {
                                 if (val) {
                                     // true is default
                                     delete obj[k];
@@ -177,7 +177,7 @@ angular.module('jsonschemaV4App')
                         case 'multipleOf':
                             var val = parseInt(obj[k]);
                             obj[k] = val;
-                            if (!user_defined_options.numericVerbose) {
+                            if (!UserDefinedOptions.numericVerbose) {
                                 // Only delete if defaut value.
                                 if (!val && val != 0) {
                                     delete obj[k];
@@ -188,7 +188,7 @@ angular.module('jsonschemaV4App')
                         case 'exclusiveMaximum':
                             var val = Boolean(obj[k]);
                             obj[k] = val;
-                            if (!user_defined_options.numericVerbose) {
+                            if (!UserDefinedOptions.numericVerbose) {
                                 if (!val) {
                                     delete obj[k];
                                 }
@@ -202,7 +202,7 @@ angular.module('jsonschemaV4App')
                         case 'description':
                             var val = String(obj[k]).trim();
                             obj[k] = val;
-                            if (!user_defined_options.metadataKeywords) {
+                            if (!UserDefinedOptions.metadataKeywords) {
                                 if (!val) {
                                     delete obj[k];
                                 }
@@ -214,7 +214,7 @@ angular.module('jsonschemaV4App')
                         case 'additionalProperties':
                             var val = Boolean(obj[k]);
                             obj[k] = val;
-                            if (!user_defined_options.objectsVerbose) {
+                            if (!UserDefinedOptions.objectsVerbose) {
                                 if (val) {
                                     // true is default
                                     delete obj[k];
@@ -259,20 +259,20 @@ angular.module('jsonschemaV4App')
 
                 switch(src.type) {
                     case 'array':
-                        if (user_defined_options.arraysVerbose) {
+                        if (UserDefinedOptions.arraysVerbose) {
                             dst.minItems = 1;
                             dst.uniqueItems = false;
-                            dst.additionalItems = user_defined_options.additionalItems;
+                            dst.additionalItems = UserDefinedOptions.additionalItems;
                         }
                         break;
                     case 'object':
-                        if (user_defined_options.objectsVerbose) {
+                        if (UserDefinedOptions.objectsVerbose) {
                             dst.additionalProperties = true;
                         }
                         break;
                     case 'integer':
                     case 'number':
-                        if (user_defined_options.numericVerbose) {
+                        if (UserDefinedOptions.numericVerbose) {
                             dst.multipleOf = 1;
                             dst.maximum = 100;
                             dst.minimum = 1;
@@ -281,7 +281,7 @@ angular.module('jsonschemaV4App')
                         }
                         break;
                     case 'string':
-                        if (user_defined_options.stringsVerbose) {
+                        if (UserDefinedOptions.stringsVerbose) {
                             dst.minLength = 1;
                         }
                     case 'boolean':
@@ -290,7 +290,7 @@ angular.module('jsonschemaV4App')
                 }
 
                 // Metadata keywords apply to all types.
-                if (user_defined_options.metadataKeywords) {
+                if (UserDefinedOptions.metadataKeywords) {
                     dst.title = src.title;
                     dst.description = src.description;
                     dst.name = src.name;
@@ -301,14 +301,14 @@ angular.module('jsonschemaV4App')
                 if (src.isObject()) {
                     dst.properties = {};
 
-                    if (!user_defined_options.additionalProperties) {
+                    if (!UserDefinedOptions.additionalProperties) {
                         // false is not default, so always show.
                         dst.additionalProperties = false;
                     } else {
                         // true is default so don't show it.
                         // Only show if objects are verbose (where default values
                         // are shown).
-                        if (user_defined_options.objectsVerbose) {
+                        if (UserDefinedOptions.objectsVerbose) {
                             dst.additionalProperties = true;
                         }
                     }
@@ -317,7 +317,7 @@ angular.module('jsonschemaV4App')
 
             this.initArray = function(src, dst) {
                 if (src.isArray()) {
-                    switch(user_defined_options.arrayOptions) {
+                    switch(UserDefinedOptions.arrayOptions) {
 
                         case ArrayOptions.emptySchema:
                             dst.items = {};
@@ -331,12 +331,12 @@ angular.module('jsonschemaV4App')
                             break;
                     }
 
-                    if (!user_defined_options.additionalItems) {
+                    if (!UserDefinedOptions.additionalItems) {
                         // false is not default, so always show.
                         dst.additionalItems = false;
                     } else {
                         // true is default, only show if objects are verbose.
-                        if (user_defined_options.arraysVerbose) {
+                        if (UserDefinedOptions.arraysVerbose) {
                             dst.additionalItems = true;
                         }
                     }
@@ -344,7 +344,7 @@ angular.module('jsonschemaV4App')
             };
 
             this.addDefault = function(src, dst) {
-                if (user_defined_options.includeDefaults) {
+                if (UserDefinedOptions.includeDefaults) {
                     if (!src.isObject() && !src.isArray()) {
                         // Only primitive types have default values.
                         dst.default = src.defaultValue;
@@ -353,7 +353,7 @@ angular.module('jsonschemaV4App')
             };
 
             this.addEnums = function(src, dst) {
-                if (user_defined_options.includeEnums) {
+                if (UserDefinedOptions.includeEnums) {
                    if (!src.isObject() && !src.isArray()) {
                         // Only primitive types have enums.
                         dst.enum = [null];
@@ -366,7 +366,7 @@ angular.module('jsonschemaV4App')
             };
 
             this.addRequired = function(src, dst) {
-                dst.__required__ = user_defined_options.forceRequired;
+                dst.__required__ = UserDefinedOptions.forceRequired;
             };
 
             this.setType = function(src, dst) {
@@ -375,9 +375,9 @@ angular.module('jsonschemaV4App')
 
             this.constructId = function(src, dst) {
 
-                if (user_defined_options.absoluteIds) {
+                if (UserDefinedOptions.absoluteIds) {
                     if (src.root) {
-                        dst.id = user_defined_options.url;
+                        dst.id = UserDefinedOptions.url;
                     } else {
                         /*
                         First time round, this will the child of root and will
@@ -453,7 +453,7 @@ angular.module('jsonschemaV4App')
                     } else if (intermediate_schema.isArray()) {
 
                         // TODO: Move to this.initItems()
-                        switch(user_defined_options.arrayOptions) {
+                        switch(UserDefinedOptions.arrayOptions) {
 
                             case ArrayOptions.emptySchema:
                                 schema.items = Utility.getEmptySchema();
