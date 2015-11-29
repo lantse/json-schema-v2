@@ -47,13 +47,8 @@ angular.module('jsonschemaV4App')
             this.jsonString2EditableSchema = function() {
                 try {
                     // Convert JSON string to JavaScript object.
-<<<<<<< HEAD
-                    self.json = angular.fromJson(user_defined_options.json);
-                    // console.log(self.json);
-=======
                     self.json = angular.fromJson(UserDefinedOptions.json);
                     console.log(self.json);
->>>>>>> origin/master
                     /*
                     * Construct our own, custom, intermediate format that
                     * represents the hierarchy of parent / child schemas but

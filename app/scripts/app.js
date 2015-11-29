@@ -137,7 +137,7 @@ var defaultOptions = {
     metadataKeywords: false,
     additionalItems: true,
     additionalProperties: true
-}
+};
 
 // User starts with default options.
 var UserDefinedOptions = angular.copy(defaultOptions);
