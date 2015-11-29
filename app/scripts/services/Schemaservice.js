@@ -47,8 +47,13 @@ angular.module('jsonschemaV4App')
             this.jsonString2EditableSchema = function() {
                 try {
                     // Convert JSON string to JavaScript object.
+<<<<<<< HEAD
                     self.json = angular.fromJson(user_defined_options.json);
                     // console.log(self.json);
+=======
+                    self.json = angular.fromJson(UserDefinedOptions.json);
+                    console.log(self.json);
+>>>>>>> origin/master
                     /*
                     * Construct our own, custom, intermediate format that
                     * represents the hierarchy of parent / child schemas but
@@ -94,23 +99,43 @@ angular.module('jsonschemaV4App')
                 var key = obj['__key__'];
                 for (var k in obj)
                 {
+<<<<<<< HEAD
                     // console.log(k);
+=======
+                    var property = obj[k];
+                    
+>>>>>>> origin/master
                     if (typeof obj[k] == "object" && obj[k] !== null) {
+                        // User removed schema.
                         if (obj[k].__removed__) {
+                            // Will delete all sub-schemas, which we want.
                             delete obj[k];
                             continue;
                         }
+<<<<<<< HEAD
                         // Recursive call parsing in parent object this time.
+=======
+                        // Recursive call parsing in sub-schema.
+>>>>>>> origin/master
                         this.clean(obj[k]);
                         return;
                     }
+<<<<<<< HEAD
+=======
+
+                    //else {
+>>>>>>> origin/master
                     switch (String(k)) {
                         /*
                         Metadata keywords.
                         */
                         case '__required__':
                             var isRequired = obj[k];
+<<<<<<< HEAD
                             // console.log('isRequired: ' + isRequired);
+=======
+                            console.log('getSchema('+obj.__parent__+')');
+>>>>>>> origin/master
                             var parentSchema = self.getSchema(obj.__parent__);
                             if (parentSchema) {
 
@@ -125,6 +150,7 @@ angular.module('jsonschemaV4App')
                                 } else {
 
                                     if (parentSchema.required) {
+<<<<<<< HEAD
                                          // $log.debug('key:' + key);
                                          // $log.debug(parentSchema);
                                         var index = parentSchema.required.indexOf(key);
@@ -132,10 +158,22 @@ angular.module('jsonschemaV4App')
                                         if (index > -1) {
                                             parentSchema.required.splice(index, 1);
                                             // $log.debug("Splice: " + parentSchema.required);
+=======
+                                        var index = parentSchema.required.indexOf(key);
+                                        if (index > -1) {
+                                            console.log(key);
+                                            parentSchema.required.splice(index, 1);
+                                            console.log(parentSchema.required);
+>>>>>>> origin/master
                                         }
                                     }
                                 }
                             }
+<<<<<<< HEAD
+=======
+
+                            //self.addRequired(obj, key, required);
+>>>>>>> origin/master
                         break;
                         case '__parent__':
                             //console.log('obj.__parent__' + '=' + obj.__parent__);
@@ -150,7 +188,11 @@ angular.module('jsonschemaV4App')
                         case 'uniqueItems':
                             var val = Boolean(obj[k]);
                             obj[k] = val;
+<<<<<<< HEAD
                             if (!user_defined_options.arraysVerbose) {
+=======
+                            if (!UserDefinedOptions.arraysVerbose) {
+>>>>>>> origin/master
                                 if (!val) {
                                     delete obj[k];
                                 }
@@ -159,7 +201,11 @@ angular.module('jsonschemaV4App')
                         case 'additionalItems':
                             var val = Boolean(obj[k]);
                             obj[k] = val;
+<<<<<<< HEAD
                             if (!user_defined_options.arraysVerbose) {
+=======
+                            if (!UserDefinedOptions.arraysVerbose) {
+>>>>>>> origin/master
                                 if (val) {
                                     // true is default
                                     delete obj[k];
@@ -175,7 +221,11 @@ angular.module('jsonschemaV4App')
                         case 'multipleOf':
                             var val = parseInt(obj[k]);
                             obj[k] = val;
+<<<<<<< HEAD
                             if (!user_defined_options.numericVerbose) {
+=======
+                            if (!UserDefinedOptions.numericVerbose) {
+>>>>>>> origin/master
                                 // Only delete if defaut value.
                                 if (!val && val != 0) {
                                     delete obj[k];
@@ -186,7 +236,11 @@ angular.module('jsonschemaV4App')
                         case 'exclusiveMaximum':
                             var val = Boolean(obj[k]);
                             obj[k] = val;
+<<<<<<< HEAD
                             if (!user_defined_options.numericVerbose) {
+=======
+                            if (!UserDefinedOptions.numericVerbose) {
+>>>>>>> origin/master
                                 if (!val) {
                                     delete obj[k];
                                 }
@@ -200,7 +254,11 @@ angular.module('jsonschemaV4App')
                         case 'description':
                             var val = String(obj[k]).trim();
                             obj[k] = val;
+<<<<<<< HEAD
                             if (!user_defined_options.metadataKeywords) {
+=======
+                            if (!UserDefinedOptions.metadataKeywords) {
+>>>>>>> origin/master
                                 if (!val) {
                                     delete obj[k];
                                 }
@@ -212,7 +270,11 @@ angular.module('jsonschemaV4App')
                         case 'additionalProperties':
                             var val = Boolean(obj[k]);
                             obj[k] = val;
+<<<<<<< HEAD
                             if (!user_defined_options.objectsVerbose) {
+=======
+                            if (!UserDefinedOptions.objectsVerbose) {
+>>>>>>> origin/master
                                 if (val) {
                                     // true is default
                                     delete obj[k];
@@ -222,6 +284,7 @@ angular.module('jsonschemaV4App')
 
 
                     }
+<<<<<<< HEAD
                         // General logic.
                         // Remove __meta data__ from Code schema, but don't change
                         // editable schema.
@@ -230,11 +293,22 @@ angular.module('jsonschemaV4App')
                             delete obj[k];
                         }
                     
+=======
+                    // General logic.
+                    // Remove __meta data__ from Code schema, but don't change
+                    // editable schema.
+                    var metaKey = k.match(/^__.*__$/g);
+                    if (metaKey) {
+                        delete obj[k];
+                    }
+                    //}
+>>>>>>> origin/master
                 }
             };
 
             this.schema4Object = function(aKey, aValue) {
 
+                // Schema() instance.
                 var schema = Schemafactory.getInstance(aKey, aValue);
 
                 angular.forEach(aValue, function(value, key) {
@@ -256,20 +330,20 @@ angular.module('jsonschemaV4App')
 
                 switch(src.type) {
                     case 'array':
-                        if (user_defined_options.arraysVerbose) {
+                        if (UserDefinedOptions.arraysVerbose) {
                             dst.minItems = 1;
                             dst.uniqueItems = false;
-                            dst.additionalItems = user_defined_options.additionalItems;
+                            dst.additionalItems = UserDefinedOptions.additionalItems;
                         }
                         break;
                     case 'object':
-                        if (user_defined_options.objectsVerbose) {
+                        if (UserDefinedOptions.objectsVerbose) {
                             dst.additionalProperties = true;
                         }
                         break;
                     case 'integer':
                     case 'number':
-                        if (user_defined_options.numericVerbose) {
+                        if (UserDefinedOptions.numericVerbose) {
                             dst.multipleOf = 1;
                             dst.maximum = 100;
                             dst.minimum = 1;
@@ -278,7 +352,7 @@ angular.module('jsonschemaV4App')
                         }
                         break;
                     case 'string':
-                        if (user_defined_options.stringsVerbose) {
+                        if (UserDefinedOptions.stringsVerbose) {
                             dst.minLength = 1;
                         }
                     case 'boolean':
@@ -287,7 +361,7 @@ angular.module('jsonschemaV4App')
                 }
 
                 // Metadata keywords apply to all types.
-                if (user_defined_options.metadataKeywords) {
+                if (UserDefinedOptions.metadataKeywords) {
                     dst.title = src.title;
                     dst.description = src.description;
                     dst.name = src.name;
@@ -298,12 +372,14 @@ angular.module('jsonschemaV4App')
                 if (src.isObject()) {
                     dst.properties = {};
 
-                    if (!user_defined_options.additionalProperties) {
+                    if (!UserDefinedOptions.additionalProperties) {
                         // false is not default, so always show.
                         dst.additionalProperties = false;
                     } else {
-                        // true is default, only show if objects are verbose.
-                        if (user_defined_options.objectsVerbose) {
+                        // true is default so don't show it.
+                        // Only show if objects are verbose (where default values
+                        // are shown).
+                        if (UserDefinedOptions.objectsVerbose) {
                             dst.additionalProperties = true;
                         }
                     }
@@ -312,7 +388,7 @@ angular.module('jsonschemaV4App')
 
             this.initArray = function(src, dst) {
                 if (src.isArray()) {
-                    switch(user_defined_options.arrayOptions) {
+                    switch(UserDefinedOptions.arrayOptions) {
 
                         case ArrayOptions.emptySchema:
                             dst.items = {};
@@ -326,12 +402,12 @@ angular.module('jsonschemaV4App')
                             break;
                     }
 
-                    if (!user_defined_options.additionalItems) {
+                    if (!UserDefinedOptions.additionalItems) {
                         // false is not default, so always show.
                         dst.additionalItems = false;
                     } else {
                         // true is default, only show if objects are verbose.
-                        if (user_defined_options.arraysVerbose) {
+                        if (UserDefinedOptions.arraysVerbose) {
                             dst.additionalItems = true;
                         }
                     }
@@ -339,7 +415,7 @@ angular.module('jsonschemaV4App')
             };
 
             this.addDefault = function(src, dst) {
-                if (user_defined_options.includeDefaults) {
+                if (UserDefinedOptions.includeDefaults) {
                     if (!src.isObject() && !src.isArray()) {
                         // Only primitive types have default values.
                         dst.default = src.defaultValue;
@@ -348,7 +424,7 @@ angular.module('jsonschemaV4App')
             };
 
             this.addEnums = function(src, dst) {
-                if (user_defined_options.includeEnums) {
+                if (UserDefinedOptions.includeEnums) {
                    if (!src.isObject() && !src.isArray()) {
                         // Only primitive types have enums.
                         dst.enum = [null];
@@ -361,7 +437,7 @@ angular.module('jsonschemaV4App')
             };
 
             this.addRequired = function(src, dst) {
-                dst.__required__ = user_defined_options.forceRequired;
+                dst.__required__ = UserDefinedOptions.forceRequired;
             };
 
             this.setType = function(src, dst) {
@@ -370,9 +446,9 @@ angular.module('jsonschemaV4App')
 
             this.constructId = function(src, dst) {
 
-                if (user_defined_options.absoluteIds) {
+                if (UserDefinedOptions.absoluteIds) {
                     if (src.root) {
-                        dst.id = user_defined_options.url;
+                        dst.id = UserDefinedOptions.url;
                     } else {
                         /*
                         First time round, this will the child of root and will
@@ -428,16 +504,17 @@ angular.module('jsonschemaV4App')
                 /*
                 Subschemas last.
                 Don't actually add any properties or items, just initialize
-                the object properties so properties and items may be added.
+                the object properties so schema properties and schema items may be added.
                 */
                 self.initObject(intermediate_schema, schema);
                 self.initArray(intermediate_schema, schema);
 
                 // Schemas with no sub-schemas will just skip this loop and
-                // return the { } object.
+                // return the { } object with values set from before this loop.
                 angular.forEach(intermediate_schema.subSchemas, function(value, key) {
 
                     // Each sub-schema will need its own {} schema object.
+                    // Recursive call.
                     var subSchema = self.constructSchema(value);
                     subSchema.__parent__ = schema.id;
 
@@ -447,7 +524,7 @@ angular.module('jsonschemaV4App')
                     } else if (intermediate_schema.isArray()) {
 
                         // TODO: Move to this.initItems()
-                        switch(user_defined_options.arrayOptions) {
+                        switch(UserDefinedOptions.arrayOptions) {
 
                             case ArrayOptions.emptySchema:
                                 schema.items = Utility.getEmptySchema();

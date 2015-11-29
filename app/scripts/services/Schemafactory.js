@@ -5,10 +5,10 @@ angular.module('jsonschemaV4App')
         function($log, Utility) {
 
             /**
-            * Note that this function does not check user_defined_options.
+            * Note that this function does not check UserDefinedOptions.
             * It just sets all data that we know of now, or can deduce.
             * For example, we set name, title and description whether or not
-            * user_defined_options.metadataKeywords is true.
+            * UserDefinedOptions.metadataKeywords is true.
             */
             var Schema = function(aKey, aValue) {
 
@@ -20,16 +20,20 @@ angular.module('jsonschemaV4App')
                 this.root = !angular.isDefined(aKey);
                 // These values are copied from 'src' to 'dst' in Schemaservice.
                 this.key = this.root ? '/' : String(aKey);
-                this.id = this.root ? user_defined_options.url : String(aKey);
+                this.name = this.root ? '/' : String(aKey);
+                this.id = this.root ? UserDefinedOptions.url : String(aKey);
                 this.type = Utility.getType(aValue);
                 this.title = this.root ? 'Root schema.' : String(aKey)[0].toUpperCase() + String(aKey).slice(1) + ' schema.';
                 this.description = 'An explanation about the puropose of this instance described by this schema.';
-                this.name = this.root ? '/' : String(aKey);
+                
                 if (isPrimitiveType) {
                     this.defaultValue = aValue;
                 }
 
                 this.subSchemas = [];
+
+                // At this point we have populated all the values we can
+                // and created a barebones Schema() instnace for the SchemaService.
             };
 
             Schema.prototype.addSubSchema = function(aSchema) {

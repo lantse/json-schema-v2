@@ -120,7 +120,7 @@ app.constant('ArrayOptions', arrayOptionsEnum);
 app.constant('Specification', 'http://json-schema.org/draft-04/schema#');
 
 // Assume some default values for user defined parameters.
-var default_options = {
+var defaultOptions = {
     url: 'http://jsonschema.net',
     json: testData.starter,
     // Array options.
@@ -140,10 +140,10 @@ var default_options = {
 }
 
 // User starts with default options.
-var user_defined_options = angular.copy(default_options);
+var UserDefinedOptions = angular.copy(defaultOptions);
 
-app.value('user_defined_options', user_defined_options);
-app.value('default_options', default_options);
+app.value('UserDefinedOptions', UserDefinedOptions);
+app.value('defaultOptions', defaultOptions);
 
 app.config(function($routeProvider) {
     $routeProvider

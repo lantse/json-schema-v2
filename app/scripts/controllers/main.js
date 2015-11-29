@@ -41,7 +41,7 @@ angular.module('jsonschemaV4App').factory('RecursionHelper',
                         });
 
 
-                        scope.user_defined_options = user_defined_options;
+                        scope.UserDefinedOptions = UserDefinedOptions;
 
                         scope.deleteMe = function(id) {
                             iElement.remove();
@@ -86,22 +86,22 @@ angular.module('jsonschemaV4App')
                     return;
                 }
                 // Update app options in case the user defined new values.
-                user_defined_options.url = $scope.url;
-                user_defined_options.json = $scope.json;
-                user_defined_options.includeDefaults = $scope.includeDefaults;
-                user_defined_options.includeEnums = $scope.includeEnums;
-                user_defined_options.forceRequired = $scope.forceRequired;
-                user_defined_options.emptySchemas = $scope.emptySchemas;
-                user_defined_options.arrayOptions = $scope.arrayOptions;
-                user_defined_options.absoluteIds = $scope.absoluteIds;
-                user_defined_options.numericVerbose = $scope.numericVerbose;
-                user_defined_options.stringsVerbose = $scope.stringsVerbose;
-                user_defined_options.objectsVerbose = $scope.objectsVerbose;
-                user_defined_options.arraysVerbose = $scope.arraysVerbose;
-                user_defined_options.metadataKeywords = $scope.metadataKeywords;
-                user_defined_options.numericVerbose = $scope.numericVerbose;
-                user_defined_options.additionalItems = $scope.additionalItems;
-                user_defined_options.additionalProperties = $scope.additionalProperties;
+                UserDefinedOptions.url = $scope.url;
+                UserDefinedOptions.json = $scope.json;
+                UserDefinedOptions.includeDefaults = $scope.includeDefaults;
+                UserDefinedOptions.includeEnums = $scope.includeEnums;
+                UserDefinedOptions.forceRequired = $scope.forceRequired;
+                UserDefinedOptions.emptySchemas = $scope.emptySchemas;
+                UserDefinedOptions.arrayOptions = $scope.arrayOptions;
+                UserDefinedOptions.absoluteIds = $scope.absoluteIds;
+                UserDefinedOptions.numericVerbose = $scope.numericVerbose;
+                UserDefinedOptions.stringsVerbose = $scope.stringsVerbose;
+                UserDefinedOptions.objectsVerbose = $scope.objectsVerbose;
+                UserDefinedOptions.arraysVerbose = $scope.arraysVerbose;
+                UserDefinedOptions.metadataKeywords = $scope.metadataKeywords;
+                UserDefinedOptions.numericVerbose = $scope.numericVerbose;
+                UserDefinedOptions.additionalItems = $scope.additionalItems;
+                UserDefinedOptions.additionalProperties = $scope.additionalProperties;
 
                 // Generate basic schema structure.
                 Schemaservice.JSON2Schema();
@@ -112,26 +112,26 @@ angular.module('jsonschemaV4App')
 
             $scope.reset = function() {
 
-                user_defined_options = angular.copy(default_options);
+                UserDefinedOptions = angular.copy(defaultOptions);
 
                 $scope.inputError = false;
                 //
-                $scope.url = default_options.url;
-                $scope.json = angular.toJson(default_options.json, true);
-                $scope.includeDefaults = default_options.includeDefaults;
-                $scope.includeEnums = default_options.includeEnums;
-                $scope.forceRequired = default_options.forceRequired;
-                $scope.emptySchemas = default_options.emptySchemas;
-                $scope.arrayOptions = default_options.arrayOptions;
-                $scope.absoluteIds = default_options.absoluteIds;
-                $scope.numericVerbose = default_options.numericVerbose;
-                $scope.stringsVerbose = default_options.stringsVerbose;
-                $scope.objectsVerbose = default_options.objectsVerbose;
-                $scope.arraysVerbose = default_options.arraysVerbose;
-                $scope.metadataKeywords = default_options.metadataKeywords;
-                $scope.numericVerbose = default_options.numericVerbose;
-                $scope.additionalItems = default_options.additionalItems;
-                $scope.additionalProperties = default_options.additionalProperties;
+                $scope.url = defaultOptions.url;
+                $scope.json = angular.toJson(defaultOptions.json, true);
+                $scope.includeDefaults = defaultOptions.includeDefaults;
+                $scope.includeEnums = defaultOptions.includeEnums;
+                $scope.forceRequired = defaultOptions.forceRequired;
+                $scope.emptySchemas = defaultOptions.emptySchemas;
+                $scope.arrayOptions = defaultOptions.arrayOptions;
+                $scope.absoluteIds = defaultOptions.absoluteIds;
+                $scope.numericVerbose = defaultOptions.numericVerbose;
+                $scope.stringsVerbose = defaultOptions.stringsVerbose;
+                $scope.objectsVerbose = defaultOptions.objectsVerbose;
+                $scope.arraysVerbose = defaultOptions.arraysVerbose;
+                $scope.metadataKeywords = defaultOptions.metadataKeywords;
+                $scope.numericVerbose = defaultOptions.numericVerbose;
+                $scope.additionalItems = defaultOptions.additionalItems;
+                $scope.additionalProperties = defaultOptions.additionalProperties;
             }
 
             $scope.init = function() {
