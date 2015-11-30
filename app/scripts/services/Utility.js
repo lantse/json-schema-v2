@@ -42,5 +42,5 @@ angular.module('jsonschemaV4App')
     }
 
     return schmea;
-  }
+  };
 });
