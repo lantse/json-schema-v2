@@ -156,10 +156,10 @@ angular.module('jsonschemaV4App')
                 $scope.data = Schemaservice.getEditableSchema();
             }
 
-            // $scope.$on('E_SchemaUpdated', function (event, data) {
-            //     $log.debug('E_SchemaUpdated');
-            //     $scope.init();
-            // });
+            $scope.$on('E_SchemaUpdated', function (event, data) {
+                $log.debug('E_SchemaUpdated');
+                $scope.init();
+            });
 
             $scope.init();
         }
@@ -175,10 +175,10 @@ angular.module('jsonschemaV4App')
                                 true);
             }
 
-            // $scope.$on('E_SchemaUpdated', function (event, data) {
-            //     $log.debug('E_SchemaUpdated');
-            //     $scope.init();
-            // });
+            $scope.$on('E_SchemaUpdated', function (event, data) {
+                $log.debug('E_SchemaUpdated');
+                $scope.init();
+            });
 
             $scope.init();
         }
@@ -194,10 +194,10 @@ angular.module('jsonschemaV4App')
                                 false);
             }
 
-            // $scope.$on('E_SchemaUpdated', function (event, data) {
-            //     $log.debug('E_SchemaUpdated');
-            //     $scope.init();
-            // });
+            $scope.$on('E_SchemaUpdated', function (event, data) {
+                $log.debug('E_SchemaUpdated');
+                $scope.init();
+            });
 
             $scope.init();
         }
@@ -247,7 +247,9 @@ angular.module('jsonschemaV4App')
                 $scope.editSchema = false;
                 $scope.stringSchema = false;
 
-                $scope.$digest();
+                if(!$scope.$$phase) {
+                    $scope.$digest();
+                }
             };
 
             $scope.init = function() {

@@ -60,8 +60,10 @@ angular.module('jsonschemaV4App')
                     objects contains all sorts of custom properties.*/
                     self.editableSchema = self.constructSchema(
                         self.intermediateResult);
-                } catch(e) {
 
+
+                } catch(e) {
+                    console.log("exception: ", e);
                 }
             };
 
@@ -74,8 +76,6 @@ angular.module('jsonschemaV4App')
                 this.clean(self.schema);
                 // $log.debug(self.schema);
             };
-
-
 
             /**
             * This gets run every time the code view is selected!
@@ -90,16 +90,13 @@ angular.module('jsonschemaV4App')
                 up the 'required' property from __required__ metadata.
             */
             this.clean = function(obj) {
-                // console.log("clean(" + obj + ")");
+                 
                 var key = obj['__key__'];
+                console.log("clean obj (" + key + ")");
+                var count = 0;
                 for (var k in obj)
                 {
-<<<<<<< HEAD
-                    // console.log(k);
-=======
-                    var property = obj[k];
-                    
->>>>>>> origin/master
+
                     if (typeof obj[k] == "object" && obj[k] !== null) {
                         // User removed schema.
                         if (obj[k].__removed__) {
@@ -107,179 +104,159 @@ angular.module('jsonschemaV4App')
                             delete obj[k];
                             continue;
                         }
-<<<<<<< HEAD
+
                         // Recursive call parsing in parent object this time.
-=======
-                        // Recursive call parsing in sub-schema.
->>>>>>> origin/master
+
                         this.clean(obj[k]);
-                        return;
+                        //return;
                     }
-<<<<<<< HEAD
-=======
+                    else {
+                        switch (String(k)) {
+                            /*
+                            Metadata keywords.
+                            */
+                            case '__required__':
+                                var isRequired = obj[k];
 
-                    //else {
->>>>>>> origin/master
-                    switch (String(k)) {
-                        /*
-                        Metadata keywords.
-                        */
-                        case '__required__':
-                            var isRequired = obj[k];
-<<<<<<< HEAD
-                            // console.log('isRequired: ' + isRequired);
-=======
-                            console.log('getSchema('+obj.__parent__+')');
->>>>>>> origin/master
-                            var parentSchema = self.getSchema(obj.__parent__);
-                            if (parentSchema) {
+                                var parentSchema = self.getSchema(obj.__parent__);
+                                if (parentSchema) {
 
-                                if (isRequired) {
-                                    if (!parentSchema.required) {
-                                        parentSchema.required = [];
-                                    }
-                                    var index = parentSchema.required.indexOf(key);
-                                    if (index < 0) {
-                                        parentSchema.required.push(key);
-                                    }
-                                } else {
-
-                                    if (parentSchema.required) {
-<<<<<<< HEAD
-                                         // $log.debug('key:' + key);
-                                         // $log.debug(parentSchema);
+                                    if (isRequired) {
+                                        if (!parentSchema.required) {
+                                            parentSchema.required = [];
+                                        }
                                         var index = parentSchema.required.indexOf(key);
-                                        // $log.debug(parentSchema.required);
-                                        if (index > -1) {
-                                            parentSchema.required.splice(index, 1);
-                                            // $log.debug("Splice: " + parentSchema.required);
-=======
-                                        var index = parentSchema.required.indexOf(key);
-                                        if (index > -1) {
-                                            console.log(key);
-                                            parentSchema.required.splice(index, 1);
-                                            console.log(parentSchema.required);
->>>>>>> origin/master
+                                        if (index < 0) {
+                                            parentSchema.required.push(key);
+                                        }
+                                    } else {
+
+                                        if (parentSchema.required) {
+
+                                             // $log.debug('key:' + key);
+                                             // $log.debug(parentSchema);
+                                            var index = parentSchema.required.indexOf(key);
+                                            // $log.debug(parentSchema.required);
+                                            if (index > -1) {
+                                                parentSchema.required.splice(index, 1);
+                                                // $log.debug("Splice: " + parentSchema.required);
+
+                                            }
                                         }
                                     }
                                 }
-                            }
-<<<<<<< HEAD
-=======
 
-                            //self.addRequired(obj, key, required);
->>>>>>> origin/master
-                        break;
-                        case '__parent__':
-                            //console.log('obj.__parent__' + '=' + obj.__parent__);
-                        case '__removed__':
                             break;
-                        /*
-                        Keywords for arrays.
-                        */
-                        case 'maxItems':
-                        case 'minItems':
-                            break;
-                        case 'uniqueItems':
-                            var val = Boolean(obj[k]);
-                            obj[k] = val;
-<<<<<<< HEAD
-                            if (!user_defined_options.arraysVerbose) {
-=======
-                            if (!UserDefinedOptions.arraysVerbose) {
->>>>>>> origin/master
-                                if (!val) {
-                                    delete obj[k];
+                            case '__parent__':
+                                //console.log('obj.__parent__' + '=' + obj.__parent__);
+                            case '__removed__':
+                                break;
+                            /*
+                            Keywords for arrays.
+                            */
+                            case 'maxItems':
+                            case 'minItems':
+                                break;
+                            case 'uniqueItems':
+                                var val = Boolean(obj[k]);
+                                obj[k] = val;
+
+                                if (!user_defined_options.arraysVerbose) {
+
+                               // if (!UserDefinedOptions.arraysVerbose) {
+
+                                    if (!val) {
+                                        delete obj[k];
+                                    }
                                 }
-                            }
-                            break;
-                        case 'additionalItems':
-                            var val = Boolean(obj[k]);
-                            obj[k] = val;
-<<<<<<< HEAD
-                            if (!user_defined_options.arraysVerbose) {
-=======
-                            if (!UserDefinedOptions.arraysVerbose) {
->>>>>>> origin/master
-                                if (val) {
-                                    // true is default
-                                    delete obj[k];
+                                break;
+                            case 'additionalItems':
+                                var val = Boolean(obj[k]);
+                                obj[k] = val;
+
+                                if (!user_defined_options.arraysVerbose) {
+
+                             //   if (!UserDefinedOptions.arraysVerbose) {
+
+                                    if (val) {
+                                        // true is default
+                                        delete obj[k];
+                                    }
                                 }
-                            }
-                            break;
-                        /*
-                        Keywords for numeric instances (number and
-                        integer).
-                        */
-                        case 'minimum':
-                        case 'maximum':
-                        case 'multipleOf':
-                            var val = parseInt(obj[k]);
-                            obj[k] = val;
-<<<<<<< HEAD
-                            if (!user_defined_options.numericVerbose) {
-=======
-                            if (!UserDefinedOptions.numericVerbose) {
->>>>>>> origin/master
-                                // Only delete if defaut value.
-                                if (!val && val != 0) {
-                                    delete obj[k];
+                                break;
+                            /*
+                            Keywords for numeric instances (number and
+                            integer).
+                            */
+                            case 'minimum':
+                            case 'maximum':
+                            case 'multipleOf':
+                                var val = parseInt(obj[k]);
+                                obj[k] = val;
+
+                                if (!user_defined_options.numericVerbose) {
+
+                              //  if (!UserDefinedOptions.numericVerbose) {
+
+                                    // Only delete if defaut value.
+                                    if (!val && val != 0) {
+                                        delete obj[k];
+                                    }
                                 }
-                            }
-                            break;
-                        case 'exclusiveMinimum':
-                        case 'exclusiveMaximum':
-                            var val = Boolean(obj[k]);
-                            obj[k] = val;
-<<<<<<< HEAD
-                            if (!user_defined_options.numericVerbose) {
-=======
-                            if (!UserDefinedOptions.numericVerbose) {
->>>>>>> origin/master
-                                if (!val) {
-                                    delete obj[k];
+                                break;
+                            case 'exclusiveMinimum':
+                            case 'exclusiveMaximum':
+                                var val = Boolean(obj[k]);
+                                obj[k] = val;
+
+                                if (!user_defined_options.numericVerbose) {
+
+                             //   if (!UserDefinedOptions.numericVerbose) {
+
+                                    if (!val) {
+                                        delete obj[k];
+                                    }
                                 }
-                            }
-                            break;
-                        /*
-                        Metadata keywords.
-                        */
-                        case 'name':
-                        case 'title':
-                        case 'description':
-                            var val = String(obj[k]).trim();
-                            obj[k] = val;
-<<<<<<< HEAD
-                            if (!user_defined_options.metadataKeywords) {
-=======
-                            if (!UserDefinedOptions.metadataKeywords) {
->>>>>>> origin/master
-                                if (!val) {
-                                    delete obj[k];
+                                break;
+                            /*
+                            Metadata keywords.
+                            */
+                            case 'name':
+                            case 'title':
+                            case 'description':
+                                var val = String(obj[k]).trim();
+                                obj[k] = val;
+
+                                if (!user_defined_options.metadataKeywords) {
+
+                            //    if (!UserDefinedOptions.metadataKeywords) {
+
+                                    if (!val) {
+                                        delete obj[k];
+                                    }
                                 }
-                            }
-                            break;
-                        /*
-                        Keywords for objects.
-                        */
-                        case 'additionalProperties':
-                            var val = Boolean(obj[k]);
-                            obj[k] = val;
-<<<<<<< HEAD
-                            if (!user_defined_options.objectsVerbose) {
-=======
-                            if (!UserDefinedOptions.objectsVerbose) {
->>>>>>> origin/master
-                                if (val) {
-                                    // true is default
-                                    delete obj[k];
+                                break;
+                            /*
+                            Keywords for objects.
+                            */
+                            case 'additionalProperties':
+                                var val = Boolean(obj[k]);
+                                obj[k] = val;
+
+                                if (!user_defined_options.objectsVerbose) {
+
+                            //    if (!UserDefinedOptions.objectsVerbose) {
+
+                                    if (val) {
+                                        // true is default
+                                        delete obj[k];
+                                    }
                                 }
-                            }
-                            break;
+                                break;
 
 
-                    }
-<<<<<<< HEAD
+                        }
+
                         // General logic.
                         // Remove __meta data__ from Code schema, but don't change
                         // editable schema.
@@ -287,17 +264,8 @@ angular.module('jsonschemaV4App')
                         if (metaKey) {
                             delete obj[k];
                         }
-                    
-=======
-                    // General logic.
-                    // Remove __meta data__ from Code schema, but don't change
-                    // editable schema.
-                    var metaKey = k.match(/^__.*__$/g);
-                    if (metaKey) {
-                        delete obj[k];
                     }
-                    //}
->>>>>>> origin/master
+
                 }
             };
 
